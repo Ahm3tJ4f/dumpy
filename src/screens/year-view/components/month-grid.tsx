@@ -1,5 +1,6 @@
 import { View, Text, StyleSheet } from "react-native";
 import { Image } from "expo-image";
+import { memo } from "react";
 import dayjs from "dayjs";
 import { colors } from "@/src/shared/theme/colors";
 import { typography } from "@/src/shared/theme/typography";
@@ -56,15 +57,21 @@ function WeekdaysRow() {
 interface MonthGridProps {
   monthKey: string;
   photos: Photo[];
+  showImages?: boolean;
 }
 
-export function MonthGrid({ monthKey, photos }: MonthGridProps) {
+export const MonthGrid = memo(function MonthGrid({
+  monthKey,
+  photos,
+  showImages = true,
+}: MonthGridProps) {
   const rows = buildMonthGrid(monthKey, photos);
 
   return (
-    <View style={styles.card}>
-      <WeekdaysRow />
-      <View style={styles.grid}>
+    <View style={styles.cardShadowOuter}>
+      <View style={styles.card}>
+        <WeekdaysRow />
+        <View style={styles.grid}>
         {rows.map((row, rowIndex) => (
           <View key={rowIndex} style={styles.row}>
             {row.map((cell, cellIndex) => {
@@ -72,7 +79,7 @@ export function MonthGrid({ monthKey, photos }: MonthGridProps) {
                 return <View key={cellIndex} style={styles.cell} />;
               }
 
-              if (cell.photos.length === 0) {
+              if (cell.photos.length === 0 || !showImages) {
                 return (
                   <View key={cellIndex} style={styles.cell}>
                     <View style={styles.emptyCell} />
@@ -80,22 +87,29 @@ export function MonthGrid({ monthKey, photos }: MonthGridProps) {
                 );
               }
 
+              const frontPhoto = cell.photos[0];
+              const backPhoto = cell.photos[1];
+
               return (
                 <View key={cellIndex} style={styles.cell}>
-                  {cell.photos.length > 1 && (
+                  {backPhoto && (
                     <View style={styles.bgImageWrapper}>
-                      <Image
-                        source={toSource(cell.photos[1].uri)}
-                        style={styles.bgImage}
-                        contentFit="cover"
-                      />
+                    <Image
+                      source={toSource(backPhoto.uri)}
+                      style={styles.bgImage}
+                      contentFit="cover"
+                      priority="low"
+                      cachePolicy="memory-disk"
+                    />
                     </View>
                   )}
                   <View style={styles.imageCell}>
                     <Image
-                      source={toSource(cell.photos[0].uri)}
+                      source={toSource(frontPhoto.uri)}
                       style={styles.image}
                       contentFit="cover"
+                      priority="high"
+                      cachePolicy="memory-disk"
                     />
                   </View>
                 </View>
@@ -104,11 +118,20 @@ export function MonthGrid({ monthKey, photos }: MonthGridProps) {
           </View>
         ))}
       </View>
+      </View>
     </View>
   );
-}
+});
 
 const styles = StyleSheet.create({
+  cardShadowOuter: {
+    borderRadius: 12,
+    shadowColor: colors.neutral[900],
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.04,
+    shadowRadius: 12,
+    elevation: 4,
+  },
   card: {
     backgroundColor: colors.neutral[0],
     borderRadius: 12,
@@ -119,10 +142,10 @@ const styles = StyleSheet.create({
     borderColor: colors.neutral[200],
     justifyContent: "center",
     shadowColor: colors.neutral[900],
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.03,
-    shadowRadius: 4,
-    elevation: 3,
+    shadowRadius: 3,
+    elevation: 2,
   },
   weekdayRow: {
     flexDirection: "row",
@@ -136,6 +159,8 @@ const styles = StyleSheet.create({
     lineHeight: 40,
     textAlign: "center",
     color: colors.neutral[700],
+    fontVariant: ["tabular-nums"],
+    letterSpacing: 0.5,
   },
   grid: {
     gap: 8,
@@ -153,7 +178,7 @@ const styles = StyleSheet.create({
   },
   emptyCell: {
     flex: 1,
-    backgroundColor: colors.neutral[100],
+    backgroundColor: colors.neutral[50],
     borderWidth: 0.5,
     borderColor: colors.neutral[200],
     borderRadius: 6,
@@ -162,6 +187,9 @@ const styles = StyleSheet.create({
     flex: 1,
     borderRadius: 6,
     overflow: "hidden",
+    backgroundColor: colors.neutral[50],
+    borderWidth: 0.5,
+    borderColor: colors.neutral[200],
   },
   bgImageWrapper: {
     position: "absolute",

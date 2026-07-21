@@ -1,16 +1,16 @@
 import React from "react";
-import { View, Text, StyleSheet, Pressable } from "react-native";
+import { View, StyleSheet, Pressable } from "react-native";
 import MaskedView from "@react-native-masked-view/masked-view";
 import { BlurView } from "expo-blur";
 import { LinearGradient } from "expo-linear-gradient";
 import * as ImagePicker from "expo-image-picker";
+import * as Haptics from "expo-haptics";
 import dayjs from "dayjs";
-import { useLocalSearchParams } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { CameraIcon, UploadSimpleIcon } from "phosphor-react-native";
+import { CameraIcon, GearIcon, UploadSimpleIcon } from "phosphor-react-native";
 import { useNormalizedSafeAreaInsets } from "@/src/shared/hooks/use-normalized-safe-area-insets";
 import { colors } from "@/src/shared/theme/colors";
-import { typography } from "@/src/shared/theme/typography";
 import { db } from "@/src/shared/db/client";
 import { photos as photosTable, type Photo } from "@/src/shared/db/schema";
 import { getPhotosByYear } from "../queries/get-photos-by-year";
@@ -21,7 +21,11 @@ function getTodayPhotos(photos: Photo[]) {
 }
 
 async function savePhotos(uris: string[], sortOrder: number) {
-  await db.insert(photosTable).values(uris.map((uri) => ({ sortOrder, uri })));
+  const entries = uris.map((uri) => ({
+    uri,
+    sortOrder,
+  }));
+  await db.insert(photosTable).values(entries);
 }
 
 export function Footer() {
@@ -47,6 +51,7 @@ export function Footer() {
     const todayPhotos = getTodayPhotos(photos);
     await savePhotos([result.assets[0].uri], todayPhotos.length);
     queryClient.invalidateQueries({ queryKey: ["photos", "year", year] });
+    await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
   };
 
   const handleImageUpload = async () => {
@@ -63,6 +68,11 @@ export function Footer() {
     const uris = result.assets.map((asset) => asset.uri);
     await savePhotos(uris, todayPhotos.length);
     queryClient.invalidateQueries({ queryKey: ["photos", "year", year] });
+    await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+  };
+
+  const handleSettings = () => {
+    // router.push("/settings");
   };
 
   return (
@@ -97,10 +107,13 @@ export function Footer() {
         <Pressable
           onPress={handleCamera}
           hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+          style={({ pressed }) => [
+            { transform: [{ scale: pressed ? 0.96 : 1 }] },
+          ]}
+          android_ripple={{ color: "rgba(0,0,0,0.1)", borderless: true }}
         >
           <LinearGradient
-            colors={[colors.softPeach, colors.winePlum]}
-            // locations={[0.3, 0.99]}
+            colors={[colors.vibrantCoral, colors.softPeach, colors.drySage]}
             style={styles.cameraButtonGradient}
           >
             <View style={styles.cameraButtonInner}>
@@ -109,12 +122,15 @@ export function Footer() {
           </LinearGradient>
         </Pressable>
         <Pressable
-          style={styles.uploadButton}
+          style={({ pressed }) => [
+            styles.uploadButton,
+            { transform: [{ scale: pressed ? 0.96 : 1 }] },
+          ]}
           onPress={handleImageUpload}
           hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+          android_ripple={{ color: "rgba(0,0,0,0.1)", borderless: true }}
         >
-          <UploadSimpleIcon size={28} color={colors.neutral[700]} />
-          <Text style={styles.uploadButtonText}>Upload</Text>
+          <UploadSimpleIcon size={20} color={colors.neutral[700]} />
         </Pressable>
       </View>
     </View>
@@ -129,33 +145,44 @@ const styles = StyleSheet.create({
   },
 
   cameraButtonGradient: {
-    width: 72,
-    height: 72,
+    width: 82,
+    height: 82,
     borderRadius: "50%",
     alignItems: "center",
     justifyContent: "center",
   },
   cameraButtonInner: {
-    width: 64,
-    height: 64,
-    borderRadius: 32,
+    width: 72,
+    height: 72,
+    borderRadius: "50%",
     backgroundColor: "black",
     alignItems: "center",
     justifyContent: "center",
   },
   uploadButton: {
     position: "absolute",
-    top: "25%",
+    top: "40%",
     right: "15%",
-    width: 72,
-    height: 72,
+    width: 50,
+    height: 50,
     borderRadius: 9999,
+    backgroundColor: colors.neutral[200],
+    borderWidth: 0.5,
+    borderColor: colors.neutral[300],
     alignItems: "center",
     justifyContent: "center",
-    gap: 2,
   },
-  uploadButtonText: {
-    ...typography.xsBold,
-    color: colors.neutral[800],
+  settingsButton: {
+    position: "absolute",
+    top: "40%",
+    left: "15%",
+    width: 50,
+    height: 50,
+    borderRadius: 9999,
+    backgroundColor: colors.neutral[200],
+    borderWidth: 0.5,
+    borderColor: colors.neutral[300],
+    alignItems: "center",
+    justifyContent: "center",
   },
 });

@@ -1,6 +1,7 @@
 import { Stack } from "expo-router";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 import { ActivityIndicator } from "react-native";
 import { SQLiteDatabase, SQLiteProvider, useSQLiteContext } from "expo-sqlite";
@@ -56,44 +57,44 @@ export default function RootLayout() {
   }
 
   return (
-    <Suspense fallback={<ActivityIndicator size="large" />}>
-      <SQLiteProvider
-        databaseName={DATABASE_NAME}
-        onInit={migrateDb}
-        options={{ enableChangeListener: true }}
-        useSuspense
-      >
-        <QueryProvider>
-          <DrizzleStudioDevTools />
-          <Stack>
-            <Stack.Screen name="index" options={{ headerShown: false }} />
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <Suspense fallback={<ActivityIndicator size="large" />}>
+        <SQLiteProvider
+          databaseName={DATABASE_NAME}
+          onInit={migrateDb}
+          options={{ enableChangeListener: true }}
+          useSuspense
+        >
+          <QueryProvider>
+            <DrizzleStudioDevTools />
+            <Stack>
+              <Stack.Screen name="index" options={{ headerShown: false }} />
+              <Stack.Screen
+                name="[year]/index"
+                options={{
+                  header: () => <YearStackHeader />,
+                }}
+              />
 
-            {/* Year View with Progressive Blur Header */}
-            <Stack.Screen
-              name="[year]/index"
-              options={{
-                header: () => <YearStackHeader />,
-              }}
-            />
-
-            <Stack.Screen
-              name="[year]/[month]/index"
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="[year]/[month]/[day]"
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="camera"
-              options={{
-                presentation: "modal",
-                headerShown: false,
-              }}
-            />
-          </Stack>
-        </QueryProvider>
-      </SQLiteProvider>
-    </Suspense>
+              <Stack.Screen
+                name="[year]/[month]/index"
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="[year]/[month]/[day]/index"
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="camera"
+                options={{
+                  presentation: "modal",
+                  headerShown: false,
+                }}
+              />
+            </Stack>
+          </QueryProvider>
+        </SQLiteProvider>
+      </Suspense>
+    </GestureHandlerRootView>
   );
 }

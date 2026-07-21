@@ -1,13 +1,12 @@
 import React from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, Pressable } from "react-native";
 import MaskedView from "@react-native-masked-view/masked-view";
 import { BlurView } from "expo-blur";
 import { LinearGradient } from "expo-linear-gradient";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { CaretLeftIcon, CaretRightIcon } from "phosphor-react-native";
 import { useRouter, useGlobalSearchParams } from "expo-router";
 import dayjs from "dayjs";
-import { typography } from "@/assets/theme/typography";
+import { typography } from "@/src/shared/theme/typography";
 import { useNormalizedSafeAreaInsets } from "@/src/shared/hooks/use-normalized-safe-area-insets";
 import { colors } from "@/src/shared/theme/colors";
 
@@ -35,7 +34,7 @@ export function YearStackHeader() {
     <View
       style={[
         StyleSheet.absoluteFill,
-        { height: insets.top + 60, paddingTop: insets.top },
+        { height: insets.top + 64 },
         styles.container,
       ]}
     >
@@ -50,40 +49,47 @@ export function YearStackHeader() {
         }
       >
         <BlurView intensity={25} style={{ flex: 1 }} tint="light" />
-        {/*<View style={{ flex: 1, backgroundColor: "red" }}></View>*/}
       </MaskedView>
-      <View
-        style={[
-          StyleSheet.absoluteFill,
-          styles.content,
-          { paddingTop: insets.top },
-        ]}
-      >
-        <TouchableOpacity
+      <View style={[styles.content, { paddingTop: insets.top }]}>
+        <Pressable
           onPress={handlePreviousYear}
           disabled={isPreviousDisabled}
           hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+          style={({ pressed }) => [
+            styles.iconButton,
+            isPreviousDisabled && styles.iconButtonDisabled,
+            {
+              transform: [{ scale: pressed && !isPreviousDisabled ? 0.96 : 1 }],
+            },
+          ]}
+          android_ripple={{ color: "rgba(0,0,0,0.1)", borderless: true }}
         >
           <CaretLeftIcon
-            size={24}
-            weight="bold"
+            size={20}
+            weight="regular"
             color={
-              isPreviousDisabled ? colors.neutral[300] : colors.neutral[900]
+              isPreviousDisabled ? colors.neutral[400] : colors.neutral[700]
             }
           />
-        </TouchableOpacity>
+        </Pressable>
         <Text style={styles.selectedYear}>{selectedYear}</Text>
-        <TouchableOpacity
+        <Pressable
           onPress={handleNextYear}
           disabled={isNextDisabled}
           hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+          style={({ pressed }) => [
+            styles.iconButton,
+            isNextDisabled && styles.iconButtonDisabled,
+            { transform: [{ scale: pressed && !isNextDisabled ? 0.96 : 1 }] },
+          ]}
+          android_ripple={{ color: "rgba(0,0,0,0.1)", borderless: true }}
         >
           <CaretRightIcon
-            size={24}
-            weight="bold"
-            color={isNextDisabled ? colors.neutral[500] : colors.neutral[900]}
+            size={20}
+            weight="regular"
+            color={isNextDisabled ? colors.neutral[400] : colors.neutral[700]}
           />
-        </TouchableOpacity>
+        </Pressable>
       </View>
     </View>
   );
@@ -92,13 +98,25 @@ export function YearStackHeader() {
 const styles = StyleSheet.create({
   container: {},
   content: {
-    position: "absolute",
     paddingHorizontal: 90,
     flexDirection: "row",
-    alignItems: "flex-start",
+    alignItems: "center",
     justifyContent: "space-between",
   },
   selectedYear: {
-    ...typography["xlBold"],
+    ...typography["2xlBold"],
+  },
+  iconButton: {
+    width: 36,
+    height: 36,
+    borderRadius: 9999,
+    backgroundColor: colors.neutral[200],
+    alignItems: "center",
+    justifyContent: "center",
+    borderWidth: 0.5,
+    borderColor: colors.neutral[300],
+  },
+  iconButtonDisabled: {
+    opacity: 0.8,
   },
 });
