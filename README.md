@@ -1,6 +1,6 @@
 # Dumpy
 
-A local-first, minimalist photo dump app for iOS and Android. Capture or select photos throughout your day, submit them as a dump for that date, and browse your visual diary through a calendar.
+A local first, minimalist photo dump app for iOS and Android. Capture or select photos throughout your day, submit them as a dump for that date, and browse your visual diary through a calendar.
 
 All data lives on-device — no accounts, no cloud sync, no backend.
 
