@@ -10,7 +10,7 @@
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.anonymous.dumpy",
+      "bundleIdentifier": "com.ahm3tj4f.dumpy",
       "appleTeamId": "9849ZS59AK"
     },
     "android": {
@@ -23,7 +23,7 @@
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false,
       "permissions": ["android.permission.CAMERA"],
-      "package": "com.anonymous.dumpy"
+      "package": "com.ahm3tj4f.dumpy"
     },
     "web": {
       "output": "static",
