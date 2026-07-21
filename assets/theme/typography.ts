@@ -1,274 +1,82 @@
-import { StyleSheet } from "react-native";
+import { Platform, StyleSheet } from "react-native";
 import { colors } from "./colors";
+
+const webTextProps = Platform.OS === "web"
+  ? {
+      fontSynthesis: "none" as const,
+      WebkitFontSmoothing: "antialiased" as const,
+      MozOsxFontSmoothing: "grayscale" as const,
+    }
+  : {};
+
+function makeVariant(
+  fontFamily: string,
+  fontSize: number,
+  lineHeight: number,
+  letterSpacing: number,
+) {
+  return {
+    fontFamily,
+    fontSize,
+    lineHeight,
+    letterSpacing,
+    color: colors.neutral[900],
+    ...webTextProps,
+  };
+}
 
 export const typography = StyleSheet.create({
   // xs — 12px
-  xsLight: {
-    fontFamily: "satoshi-light",
-    fontSize: 12,
-    lineHeight: 16,
-    letterSpacing: 0,
-    color: colors.neutral[900],
-  },
-  xsRegular: {
-    fontFamily: "satoshi-regular",
-    fontSize: 12,
-    lineHeight: 16,
-    letterSpacing: 0,
-    color: colors.neutral[900],
-  },
-  xsMedium: {
-    fontFamily: "satoshi-medium",
-    fontSize: 12,
-    lineHeight: 16,
-    letterSpacing: 0,
-    color: colors.neutral[900],
-  },
-  xsBold: {
-    fontFamily: "satoshi-bold",
-    fontSize: 12,
-    lineHeight: 16,
-    letterSpacing: 0,
-    color: colors.neutral[900],
-  },
+  xsLight: makeVariant("satoshi-light", 12, 16, 0),
+  xsRegular: makeVariant("satoshi-regular", 12, 16, 0),
+  xsMedium: makeVariant("satoshi-medium", 12, 16, 0),
+  xsBold: makeVariant("satoshi-bold", 12, 16, 0),
 
   // sm — 14px
-  smLight: {
-    fontFamily: "satoshi-light",
-    fontSize: 14,
-    lineHeight: 20,
-    letterSpacing: 0,
-    color: colors.neutral[900],
-  },
-  smRegular: {
-    fontFamily: "satoshi-regular",
-    fontSize: 14,
-    lineHeight: 20,
-    letterSpacing: 0,
-    color: colors.neutral[900],
-  },
-  smMedium: {
-    fontFamily: "satoshi-medium",
-    fontSize: 14,
-    lineHeight: 20,
-    letterSpacing: 0,
-    color: colors.neutral[900],
-  },
-  smBold: {
-    fontFamily: "satoshi-bold",
-    fontSize: 14,
-    lineHeight: 20,
-    letterSpacing: 0,
-    color: colors.neutral[900],
-  },
+  smLight: makeVariant("satoshi-light", 14, 20, 0),
+  smRegular: makeVariant("satoshi-regular", 14, 20, 0),
+  smMedium: makeVariant("satoshi-medium", 14, 20, 0),
+  smBold: makeVariant("satoshi-bold", 14, 20, 0),
 
   // base — 16px
-  baseLight: {
-    fontFamily: "satoshi-light",
-    fontSize: 16,
-    lineHeight: 24,
-    letterSpacing: 0,
-    color: colors.neutral[900],
-  },
-  baseRegular: {
-    fontFamily: "satoshi-regular",
-    fontSize: 16,
-    lineHeight: 24,
-    letterSpacing: 0,
-    color: colors.neutral[900],
-  },
-  baseMedium: {
-    fontFamily: "satoshi-medium",
-    fontSize: 16,
-    lineHeight: 24,
-    letterSpacing: 0,
-    color: colors.neutral[900],
-  },
-  baseBold: {
-    fontFamily: "satoshi-bold",
-    fontSize: 16,
-    lineHeight: 24,
-    letterSpacing: 0,
-    color: colors.neutral[900],
-  },
+  baseLight: makeVariant("satoshi-light", 16, 24, 0),
+  baseRegular: makeVariant("satoshi-regular", 16, 24, 0),
+  baseMedium: makeVariant("satoshi-medium", 16, 24, 0),
+  baseBold: makeVariant("satoshi-bold", 16, 24, 0),
 
   // lg — 18px
-  lgLight: {
-    fontFamily: "satoshi-light",
-    fontSize: 18,
-    lineHeight: 26,
-    letterSpacing: -0.1,
-    color: colors.neutral[900],
-  },
-  lgRegular: {
-    fontFamily: "satoshi-regular",
-    fontSize: 18,
-    lineHeight: 26,
-    letterSpacing: -0.1,
-    color: colors.neutral[900],
-  },
-  lgMedium: {
-    fontFamily: "satoshi-medium",
-    fontSize: 18,
-    lineHeight: 26,
-    letterSpacing: -0.1,
-    color: colors.neutral[900],
-  },
-  lgBold: {
-    fontFamily: "satoshi-bold",
-    fontSize: 18,
-    lineHeight: 26,
-    letterSpacing: -0.1,
-    color: colors.neutral[900],
-  },
+  lgLight: makeVariant("satoshi-light", 18, 26, -0.1),
+  lgRegular: makeVariant("satoshi-regular", 18, 26, -0.1),
+  lgMedium: makeVariant("satoshi-medium", 18, 26, -0.1),
+  lgBold: makeVariant("satoshi-bold", 18, 26, -0.1),
 
   // xl — 20px
-  xlLight: {
-    fontFamily: "satoshi-light",
-    fontSize: 20,
-    lineHeight: 28,
-    letterSpacing: -0.2,
-    color: colors.neutral[900],
-  },
-  xlRegular: {
-    fontFamily: "satoshi-regular",
-    fontSize: 20,
-    lineHeight: 28,
-    letterSpacing: -0.2,
-    color: colors.neutral[900],
-  },
-  xlMedium: {
-    fontFamily: "satoshi-medium",
-    fontSize: 20,
-    lineHeight: 28,
-    letterSpacing: -0.2,
-    color: colors.neutral[900],
-  },
-  xlBold: {
-    fontFamily: "satoshi-bold",
-    fontSize: 20,
-    lineHeight: 28,
-    letterSpacing: -0.2,
-    color: colors.neutral[900],
-  },
+  xlLight: makeVariant("satoshi-light", 20, 28, -0.2),
+  xlRegular: makeVariant("satoshi-regular", 20, 28, -0.2),
+  xlMedium: makeVariant("satoshi-medium", 20, 28, -0.2),
+  xlBold: makeVariant("satoshi-bold", 20, 28, -0.2),
 
   // 2xl — 24px
-  "2xlLight": {
-    fontFamily: "satoshi-light",
-    fontSize: 24,
-    lineHeight: 32,
-    letterSpacing: -0.4,
-    color: colors.neutral[900],
-  },
-  "2xlRegular": {
-    fontFamily: "satoshi-regular",
-    fontSize: 24,
-    lineHeight: 32,
-    letterSpacing: -0.4,
-    color: colors.neutral[900],
-  },
-  "2xlMedium": {
-    fontFamily: "satoshi-medium",
-    fontSize: 24,
-    lineHeight: 32,
-    letterSpacing: -0.4,
-    color: colors.neutral[900],
-  },
-  "2xlBold": {
-    fontFamily: "satoshi-bold",
-    fontSize: 24,
-    lineHeight: 32,
-    letterSpacing: -0.4,
-    color: colors.neutral[900],
-  },
+  "2xlLight": makeVariant("satoshi-light", 24, 32, -0.4),
+  "2xlRegular": makeVariant("satoshi-regular", 24, 32, -0.4),
+  "2xlMedium": makeVariant("satoshi-medium", 24, 32, -0.4),
+  "2xlBold": makeVariant("satoshi-bold", 24, 32, -0.4),
 
   // 3xl — 28px
-  "3xlLight": {
-    fontFamily: "satoshi-light",
-    fontSize: 28,
-    lineHeight: 36,
-    letterSpacing: -0.6,
-    color: colors.neutral[900],
-  },
-  "3xlRegular": {
-    fontFamily: "satoshi-regular",
-    fontSize: 28,
-    lineHeight: 36,
-    letterSpacing: -0.6,
-    color: colors.neutral[900],
-  },
-  "3xlMedium": {
-    fontFamily: "satoshi-medium",
-    fontSize: 28,
-    lineHeight: 36,
-    letterSpacing: -0.6,
-    color: colors.neutral[900],
-  },
-  "3xlBold": {
-    fontFamily: "satoshi-bold",
-    fontSize: 28,
-    lineHeight: 36,
-    letterSpacing: -0.6,
-    color: colors.neutral[900],
-  },
+  "3xlLight": makeVariant("satoshi-light", 28, 36, -0.6),
+  "3xlRegular": makeVariant("satoshi-regular", 28, 36, -0.6),
+  "3xlMedium": makeVariant("satoshi-medium", 28, 36, -0.6),
+  "3xlBold": makeVariant("satoshi-bold", 28, 36, -0.6),
 
   // 4xl — 32px
-  "4xlLight": {
-    fontFamily: "satoshi-light",
-    fontSize: 32,
-    lineHeight: 40,
-    letterSpacing: -0.8,
-    color: colors.neutral[900],
-  },
-  "4xlRegular": {
-    fontFamily: "satoshi-regular",
-    fontSize: 32,
-    lineHeight: 40,
-    letterSpacing: -0.8,
-    color: colors.neutral[900],
-  },
-  "4xlMedium": {
-    fontFamily: "satoshi-medium",
-    fontSize: 32,
-    lineHeight: 40,
-    letterSpacing: -0.8,
-    color: colors.neutral[900],
-  },
-  "4xlBold": {
-    fontFamily: "satoshi-bold",
-    fontSize: 32,
-    lineHeight: 40,
-    letterSpacing: -0.8,
-    color: colors.neutral[900],
-  },
+  "4xlLight": makeVariant("satoshi-light", 32, 40, -0.8),
+  "4xlRegular": makeVariant("satoshi-regular", 32, 40, -0.8),
+  "4xlMedium": makeVariant("satoshi-medium", 32, 40, -0.8),
+  "4xlBold": makeVariant("satoshi-bold", 32, 40, -0.8),
 
   // 5xl — 36px
-  "5xlLight": {
-    fontFamily: "satoshi-light",
-    fontSize: 36,
-    lineHeight: 44,
-    letterSpacing: -1,
-    color: colors.neutral[900],
-  },
-  "5xlRegular": {
-    fontFamily: "satoshi-regular",
-    fontSize: 36,
-    lineHeight: 44,
-    letterSpacing: -1,
-    color: colors.neutral[900],
-  },
-  "5xlMedium": {
-    fontFamily: "satoshi-medium",
-    fontSize: 36,
-    lineHeight: 44,
-    letterSpacing: -1,
-    color: colors.neutral[900],
-  },
-  "5xlBold": {
-    fontFamily: "satoshi-bold",
-    fontSize: 36,
-    lineHeight: 44,
-    letterSpacing: -1,
-    color: colors.neutral[900],
-  },
+  "5xlLight": makeVariant("satoshi-light", 36, 44, -1),
+  "5xlRegular": makeVariant("satoshi-regular", 36, 44, -1),
+  "5xlMedium": makeVariant("satoshi-medium", 36, 44, -1),
+  "5xlBold": makeVariant("satoshi-bold", 36, 44, -1),
 });
