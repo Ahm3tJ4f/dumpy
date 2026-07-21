@@ -6,6 +6,7 @@ export const photos = sqliteTable("photos", {
   createdAt: integer("created_at").notNull().default(sql`(unixepoch())`),
   uri: text("uri").notNull(),
   sortOrder: integer("sort_order").notNull(),
+
 });
 
 export type Photo = typeof photos.$inferSelect;
